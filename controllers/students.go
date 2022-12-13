@@ -87,3 +87,48 @@ func DeleteStudent(c *gin.Context) {
 		"message": "Student deleted",
 	})
 }
+
+func UpdateStudent(c *gin.Context) {
+	id := c.Param("id")
+
+	student := models.Student{}
+
+	db.DB.First(&student, id)
+
+	if student.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Student not found",
+		})
+
+		return
+	}
+
+	if err := c.ShouldBindJSON(&student); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+
+		return
+	}
+
+	db.DB.Save(&student)
+	c.JSON(http.StatusOK, student)
+}
+
+func FindStudentByCPF(c *gin.Context) {
+	cpf := c.Param("cpf")
+	student := models.Student{}
+
+
+	db.DB.Where(models.Student{CPF: cpf}).First(&student)
+
+	if student.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Student not found",
+		})
+
+		return
+	}
+
+	c.JSON(http.StatusOK, student)
+}

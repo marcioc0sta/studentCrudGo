@@ -45,4 +45,9 @@ go.work
 .history
 .ionide
 
-./postgres-data
+./postgres-data/*
+./tmp/*
+tmp/*
+/postgres-data/*
+/tmp/*
+!postgres-data/.gitkeep
